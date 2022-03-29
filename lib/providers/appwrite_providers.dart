@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite_playground/providers/states/appwrite_login_states.dart';
+import 'package:appwrite/models.dart';
+import 'package:appwrite_playground/providers/login_states/appwrite_login_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final _appwriteClientProvider = Provider<Client>(
@@ -10,11 +11,21 @@ final _appwriteClientProvider = Provider<Client>(
   },
 );
 
+final appwriteUserProvider = Provider<User?>(
+  (ref) {
+    throw UnimplementedError();
+  },
+);
+
 final appwriteAccountProvider = Provider<Account>(
   (ref) {
     return Account(ref.read(_appwriteClientProvider));
   },
 );
+
+final appwriteDatabaseProvider = Provider<Database>((ref) {
+  return Database(ref.read(_appwriteClientProvider));
+});
 
 final appwriteCreateOAuthLoginProvider =
     StateNotifierProvider<AppwriteLoginStates, LoginState>(
@@ -22,3 +33,7 @@ final appwriteCreateOAuthLoginProvider =
     return AppwriteLoginStates(read: ref.read);
   },
 );
+
+final appwriteRealTimeProvider = Provider<Realtime>((ref) {
+  return Realtime(ref.read(_appwriteClientProvider));
+});

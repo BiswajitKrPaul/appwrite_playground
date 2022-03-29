@@ -1,9 +1,34 @@
+import 'dart:developer';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart';
 import 'package:appwrite_playground/providers/appwrite_providers.dart';
+import 'package:appwrite_playground/routes/home_page/data_list.dart';
+import 'package:appwrite_playground/routes/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const ProviderScope(child: MyApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  User? user;
+  try {
+    user = await Account(
+      Client()
+        ..setEndpoint('https://api.biswajitappwrite.site/v1')
+        ..setProject('623f0b0e3a551cc6d2a6'),
+    ).get();
+  } on AppwriteException catch (e) {
+    log(e.message!);
+    user = null;
+  }
+  runApp(
+    ProviderScope(
+      overrides: [
+        appwriteUserProvider.overrideWithValue(user),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,29 +37,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Appwrite Playground',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends ConsumerWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => ref
-              .read(appwriteCreateOAuthLoginProvider.notifier)
-              .getLoggedInUser(),
-          child: const Text('Continue With Google'),
-        ),
+      home: Consumer(
+        builder: (BuildContext context, WidgetRef ref, Widget? child) {
+          return ref.read(appwriteUserProvider) == null
+              ? const LoginPage()
+              : const DataList();
+        },
       ),
+      routes: {
+        DataList.routeName: (context) => const DataList(),
+      },
     );
   }
 }

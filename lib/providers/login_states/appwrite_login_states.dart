@@ -7,19 +7,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppwriteLoginStates extends StateNotifier<LoginState> {
   final Reader read;
-  AppwriteLoginStates({required this.read}) : super(LoginState(response: null));
+  AppwriteLoginStates({required this.read}) : super(LoginState());
 
-  void login() async {
+  Future<void> login() async {
     try {
       final response = await read(appwriteAccountProvider)
           .createOAuth2Session(provider: 'google');
       state = LoginState(response: response);
     } on AppwriteException catch (err) {
       log(err.message!);
+      throw Exception(err.message);
     }
   }
 
-  void getLoggedInUser() async {
+  Future<void> getLoggedInUser() async {
     try {
       final User user = await read(appwriteAccountProvider).get();
       log(user.toMap().toString());
