@@ -1,0 +1,17 @@
+{
+    "projectId": "623f0b0e3a551cc6d2a6",
+    "projectName": "playground",
+    "functions": [
+        {
+            "$id": "62445e3db1c1743662e0",
+            "name": "list users",
+            "runtime": "dart-2.16",
+            "path": "functions/list users",
+            "entrypoint": "lib/main.dart",
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
