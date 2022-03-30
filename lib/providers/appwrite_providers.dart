@@ -3,7 +3,7 @@ import 'package:appwrite/models.dart';
 import 'package:appwrite_playground/providers/login_states/appwrite_login_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final _appwriteClientProvider = Provider<Client>(
+final appwriteClientProvider = Provider<Client>(
   (ref) {
     return Client()
       ..setEndpoint('https://api.biswajitappwrite.site/v1')
@@ -13,18 +13,18 @@ final _appwriteClientProvider = Provider<Client>(
 
 final appwriteUserProvider = Provider<User?>(
   (ref) {
-    throw UnimplementedError();
+    return null;
   },
 );
 
 final appwriteAccountProvider = Provider<Account>(
   (ref) {
-    return Account(ref.read(_appwriteClientProvider));
+    return Account(ref.read(appwriteClientProvider));
   },
 );
 
 final appwriteDatabaseProvider = Provider<Database>((ref) {
-  return Database(ref.read(_appwriteClientProvider));
+  return Database(ref.read(appwriteClientProvider));
 });
 
 final appwriteCreateOAuthLoginProvider =
@@ -35,5 +35,9 @@ final appwriteCreateOAuthLoginProvider =
 );
 
 final appwriteRealTimeProvider = Provider<Realtime>((ref) {
-  return Realtime(ref.read(_appwriteClientProvider));
+  return Realtime(ref.read(appwriteClientProvider));
+});
+
+final appwriteFuntionProvider = Provider<Functions>((ref) {
+  return Functions(ref.read(appwriteClientProvider));
 });

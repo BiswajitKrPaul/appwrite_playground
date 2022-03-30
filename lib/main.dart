@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:appwrite_playground/providers/appwrite_providers.dart';
-import 'package:appwrite_playground/routes/home_page/data_list.dart';
+import 'package:appwrite_playground/routes/chat_page/chat_page.dart';
+import 'package:appwrite_playground/routes/home_page/user_list.dart';
 import 'package:appwrite_playground/routes/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,13 +44,14 @@ class MyApp extends StatelessWidget {
       ),
       home: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          return ref.read(appwriteUserProvider) == null
+          return ref.watch(appwriteUserProvider) == null
               ? const LoginPage()
-              : const DataList();
+              : const UserListPage();
         },
       ),
       routes: {
-        DataList.routeName: (context) => const DataList(),
+        UserListPage.routeName: (context) => const UserListPage(),
+        ChatListPage.routeName: (context) => ChatListPage(),
       },
     );
   }

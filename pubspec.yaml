@@ -38,6 +38,7 @@ dependencies:
   lint: ^1.8.2
   freezed_annotation: ^1.1.0
   equatable: ^2.0.3
+  flutter_chat_bubble: ^2.0.0
 
 dev_dependencies:
   flutter_test:

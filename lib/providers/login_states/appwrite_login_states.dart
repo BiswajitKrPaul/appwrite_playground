@@ -20,13 +20,14 @@ class AppwriteLoginStates extends StateNotifier<LoginState> {
     }
   }
 
-  Future<void> getLoggedInUser() async {
+  Future<User?> getLoggedInUser() async {
     try {
       final User user = await read(appwriteAccountProvider).get();
       log(user.toMap().toString());
     } on AppwriteException catch (e) {
       log(e.message ?? 'Unknown Error');
     }
+    return null;
   }
 }
 
