@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dart_appwrite/dart_appwrite.dart';
 import 'package:dart_appwrite/models.dart';
 
@@ -20,7 +22,7 @@ Future<void> start(final req, final res) async {
       userList = await users.list();
       final response = {
         'total': userList.total,
-        'users': userList.users.map((e) => e.toMap()).toList(),
+        'users': json.encode(userList.users.map((e) => e.toMap()).toList()),
       };
       res.json(response);
     } on AppwriteException catch (e) {

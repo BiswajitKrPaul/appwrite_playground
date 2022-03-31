@@ -31,7 +31,8 @@ class UserListNotifier extends StateNotifier<UserListStates> {
         status: UserListDataState.loaded,
         total: userList.total - 1,
       );
-    } on AppwriteException {
+    } on AppwriteException catch (e) {
+      log(e.message!);
       state = state.copyWith(status: UserListDataState.error);
     }
   }
