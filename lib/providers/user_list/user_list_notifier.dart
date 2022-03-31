@@ -7,7 +7,7 @@ import 'package:appwrite_playground/providers/user_list/user_list_states.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final getUserListProvider =
-    StateNotifierProvider<UserListNotifier, UserListStates>((ref) {
+    StateNotifierProvider.autoDispose<UserListNotifier, UserListStates>((ref) {
   return UserListNotifier(ref.read);
 });
 
@@ -49,9 +49,13 @@ class UserListNotifier extends StateNotifier<UserListStates> {
         collectionId: '62445a04d6f8ae245c01',
         queries: [
           Query.equal(
-            'channeluser',
-            ['$reciverUserId$senderUserId', '$senderUserId$reciverUserId'],
+            'user1',
+            ['$reciverUserId,$senderUserId'],
           ),
+          Query.equal(
+            'user2',
+            ['$reciverUserId,$senderUserId'],
+          )
         ],
       );
 
@@ -60,7 +64,6 @@ class UserListNotifier extends StateNotifier<UserListStates> {
           collectionId: '62445a04d6f8ae245c01',
           documentId: 'unique()',
           data: {
-            'channeluser': '$reciverUserId$senderUserId',
             'user1': reciverUserId,
             'user2': senderUserId,
           },

@@ -69,7 +69,6 @@ class ChatListNotifier extends StateNotifier<AsyncValue<List<ChatListModel>>> {
           chatList.documents.map((e) => ChatListModel.fromMap(e.data)).toList(),
         ),
       );
-      log(state.toString());
     } on AppwriteException catch (e) {
       log(e.message ?? '');
       state = AsyncValue.error(e.message ?? 'Error');

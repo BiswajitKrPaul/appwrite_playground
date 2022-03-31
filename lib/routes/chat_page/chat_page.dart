@@ -24,85 +24,90 @@ class ChatListPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Chat'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 9,
-            child: chatList.map(
-              data: (data) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 4,
-                  ),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    primary: false,
-                    physics: const ClampingScrollPhysics(),
-                    reverse: true,
-                    itemBuilder: (context, index) {
-                      if (ref
-                              .read(getUserListProvider)
-                              .users[ref.read(getUserListProvider).selectedPos
-                                  as int]
-                              .$id ==
-                          data.value[index].senderId) {
-                        return ChatBubble(
-                          clipper: ChatBubbleClipper1(
-                            type: BubbleType.receiverBubble,
-                          ),
-                          backGroundColor: Colors.blueAccent,
-                          child: Text(
-                            data.value[index].message,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      } else {
-                        return ChatBubble(
-                          alignment: Alignment.centerRight,
-                          clipper: ChatBubbleClipper1(
-                            type: BubbleType.sendBubble,
-                          ),
-                          backGroundColor: Colors.grey,
-                          child: Text(
-                            data.value[index].message,
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        );
-                      }
-                    },
-                    itemCount: data.value.length,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(
-                      height: 8,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        child: Column(
+          children: [
+            Expanded(
+              child: chatList.map(
+                data: (data) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8,
+                      horizontal: 4,
                     ),
-                  ),
-                );
-              },
-              error: (err) => Center(
-                child: Text(err.error.toString()),
-              ),
-              loading: (_) => const Center(child: CircularProgressIndicator()),
-            ),
-          ),
-          Expanded(
-            //flex: ref.watch(buttonProvider) == Colors.blueAccent ? 2 : 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 8,
-                    child: Focus(
-                      onFocusChange: (hasFocus) {
-                        if (hasFocus) {
-                          ref.read(buttonProvider.notifier).state =
-                              Colors.blueAccent;
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      primary: false,
+                      physics: const ClampingScrollPhysics(),
+                      reverse: true,
+                      itemBuilder: (context, index) {
+                        if (ref
+                                .read(getUserListProvider)
+                                .users[ref.read(getUserListProvider).selectedPos
+                                    as int]
+                                .$id ==
+                            data.value[index].senderId) {
+                          return ChatBubble(
+                            elevation: 0,
+                            margin: const EdgeInsets.all(4),
+                            clipper: ChatBubbleClipper1(
+                              type: BubbleType.receiverBubble,
+                            ),
+                            backGroundColor: Colors.blueAccent.withOpacity(0.3),
+                            child: Text(
+                              data.value[index].message,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          );
                         } else {
-                          ref.read(buttonProvider.notifier).state = Colors.grey;
+                          return ChatBubble(
+                            elevation: 0,
+                            margin: const EdgeInsets.all(4),
+                            alignment: Alignment.centerRight,
+                            clipper: ChatBubbleClipper1(
+                              type: BubbleType.sendBubble,
+                            ),
+                            backGroundColor: Colors.blueAccent,
+                            child: Text(
+                              data.value[index].message,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          );
                         }
                       },
-                      child: IntrinsicHeight(
+                      itemCount: data.value.length,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(
+                        height: 8,
+                      ),
+                    ),
+                  );
+                },
+                error: (err) => Center(
+                  child: Text(err.error.toString()),
+                ),
+                loading: (_) =>
+                    const Center(child: CircularProgressIndicator()),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 8,
+                      child: Focus(
+                        onFocusChange: (hasFocus) {
+                          if (hasFocus) {
+                            ref.read(buttonProvider.notifier).state =
+                                Colors.blueAccent;
+                          } else {
+                            ref.read(buttonProvider.notifier).state =
+                                Colors.grey;
+                          }
+                        },
                         child: TextField(
                           focusNode: _focusNode,
                           controller: _textEditingController,
@@ -124,28 +129,28 @@ class ChatListPage extends ConsumerWidget {
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      onPressed: () {
-                        if (_textEditingController.value.text.isNotEmpty) {
-                          ref
-                              .read(getChatListProvider.notifier)
-                              .sendText(_textEditingController.value.text);
-                          _textEditingController.clear();
-                        }
-                      },
-                      icon: Icon(
-                        Icons.send,
-                        color: ref.watch(buttonProvider),
+                    Expanded(
+                      child: IconButton(
+                        onPressed: () {
+                          if (_textEditingController.value.text.isNotEmpty) {
+                            ref
+                                .read(getChatListProvider.notifier)
+                                .sendText(_textEditingController.value.text);
+                            _textEditingController.clear();
+                          }
+                        },
+                        icon: Icon(
+                          Icons.send,
+                          color: ref.watch(buttonProvider),
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

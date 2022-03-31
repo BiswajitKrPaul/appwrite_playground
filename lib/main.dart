@@ -11,17 +11,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  User? user;
+  late User? user;
+  final container = ProviderContainer();
   try {
-    user = await Account(
-      Client()
-        ..setEndpoint('https://api.biswajitappwrite.site/v1')
-        ..setProject('623f0b0e3a551cc6d2a6'),
-    ).get();
+    user = await container.read(appwriteAccountProvider).get();
   } on AppwriteException catch (e) {
     log(e.message!);
     user = null;
   }
+  //for disposing the container without widget binding.
+  container.dispose();
   runApp(
     ProviderScope(
       overrides: [

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dart_appwrite/dart_appwrite.dart';
 import 'package:dart_appwrite/models.dart';
 
@@ -17,13 +15,12 @@ Future<void> start(final req, final res) async {
     client
         .setEndpoint(req.env['APPWRITE_FUNCTION_ENDPOINT'])
         .setProject(req.env['APPWRITE_FUNCTION_PROJECT_ID'])
-        .setKey(req.env['APPWRITE_FUNCTION_API_KEY'])
-        .setSelfSigned(status: true);
+        .setKey(req.env['APPWRITE_FUNCTION_API_KEY']);
     try {
       userList = await users.list();
       final response = {
         'total': userList.total,
-        'users': json.encode(userList.users.map((e) => e.toMap()).toList()),
+        'users': userList.users.map((e) => e.toMap()).toList(),
       };
       res.json(response);
     } on AppwriteException catch (e) {
